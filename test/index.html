@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字练习游戏 - TypeMaster</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-particles"></div>
+    </div>
+    
+    <div class="container">
+        <!-- 游戏标题 -->
+        <header class="game-header">
+            <h1 class="game-title">
+                <i class="fas fa-keyboard"></i>
+                TypeMaster
+            </h1>
+            <p class="game-subtitle">提升你的打字技能，享受打字乐趣</p>
+        </header>
+
+        <!-- 游戏设置面板 -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="gameMode">游戏模式</label>
+                    <select id="gameMode" class="setting-select">
+                        <option value="words">单词练习</option>
+                        <option value="sentences">句子练习</option>
+                        <option value="paragraphs">段落练习</option>
+                        <option value="code">代码练习</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="difficulty">难度等级</label>
+                    <select id="difficulty" class="setting-select">
+                        <option value="easy">简单</option>
+                        <option value="medium">中等</option>
+                        <option value="hard">困难</option>
+                        <option value="expert">专家</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="timeLimit">时间限制</label>
+                    <select id="timeLimit" class="setting-select">
+                        <option value="30">30秒</option>
+                        <option value="60" selected>60秒</option>
+                        <option value="120">2分钟</option>
+                        <option value="300">5分钟</option>
+                        <option value="0">无限制</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="theme">主题</label>
+                    <select id="theme" class="setting-select">
+                        <option value="ocean">海洋</option>
+                        <option value="forest">森林</option>
+                        <option value="sunset">日落</option>
+                        <option value="space">太空</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="start-btn" id="startBtn">
+                <i class="fas fa-play"></i>
+                开始游戏
+            </button>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div class="game-interface" id="gameInterface" style="display: none;">
+            <!-- 游戏统计 -->
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="wpm">0</div>
+                    <div class="stat-label">WPM</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accuracy">100%</div>
+                    <div class="stat-label">准确率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timer">60</div>
+                    <div class="stat-label">剩余时间</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="progress">0%</div>
+                    <div class="stat-label">进度</div>
+                </div>
+            </div>
+
+            <!-- 文本显示区域 -->
+            <div class="text-display" id="textDisplay">
+                <div class="text-content" id="textContent"></div>
+                <div class="cursor" id="cursor"></div>
+            </div>
+
+            <!-- 输入区域 -->
+            <div class="input-area">
+                <input type="text" id="textInput" class="text-input" placeholder="开始输入..." autocomplete="off" spellcheck="false">
+                <div class="input-feedback" id="inputFeedback"></div>
+            </div>
+
+            <!-- 游戏控制按钮 -->
+            <div class="game-controls">
+                <button class="control-btn" id="pauseBtn">
+                    <i class="fas fa-pause"></i>
+                    暂停
+                </button>
+                <button class="control-btn" id="restartBtn">
+                    <i class="fas fa-redo"></i>
+                    重新开始
+                </button>
+                <button class="control-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                    设置
+                </button>
+            </div>
+        </div>
+
+        <!-- 结果界面 -->
+        <div class="results-panel" id="resultsPanel" style="display: none;">
+            <div class="results-content">
+                <h2 class="results-title">
+                    <i class="fas fa-trophy"></i>
+                    游戏结束
+                </h2>
+                
+                <div class="results-stats">
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="result-info">
+                            <div class="result-value" id="finalWpm">0</div>
+                            <div class="result-label">每分钟字数</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="result-info">
+                            <div class="result-value" id="finalAccuracy">100%</div>
+                            <div class="result-label">准确率</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-clock"></i></div>
+                        <div class="result-info">
+                            <div class="result-value" id="finalTime">0</div>
+                            <div class="result-label">用时</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-star"></i></div>
+                        <div class="result-info">
+                            <div class="result-value" id="finalRating">A+</div>
+                            <div class="result-label">评级</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="results-actions">
+                    <button class="result-btn primary" id="playAgainBtn">
+                        <i class="fas fa-play"></i>
+                        再玩一次
+                    </button>
+                    <button class="result-btn secondary" id="newGameBtn">
+                        <i class="fas fa-plus"></i>
+                        新游戏
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
